@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/lanrey-waju/prayer-times/internal/timings"
 	"github.com/spf13/cobra"
 )
 
@@ -14,19 +15,18 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "prayer-times",
 	Short: "A cli app to get prayer times",
-	Long:  `A cli app to get prayer times for a given location`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Prayer Times CLI")
+		fmt.Println(timings.GetPrayerTimes())
 	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
 }
