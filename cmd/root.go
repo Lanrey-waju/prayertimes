@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/lanrey-waju/prayer-times/internal/config"
 	"github.com/lanrey-waju/prayer-times/internal/timings"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -18,7 +20,11 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(timings.GetPrayerTimes())
+		config.InitConfig()
+
+		config.EnsureConfig(timings.GetLoacationParams)
+		city := viper.GetString("location.city")
+		timings.GetPrayerTimes(city)
 	},
 }
 

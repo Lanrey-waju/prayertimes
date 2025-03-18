@@ -1,6 +1,6 @@
 package timings
 
-type Response struct {
+type PrayerTimes struct {
 	Code   int    `json:"code"`
 	Status string `json:"status"`
 	Data   struct {
