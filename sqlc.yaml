@@ -1,0 +1,18 @@
+version: "2"
+cloud:
+  organization: "Abdulmumin Akinde"
+  project: "Prayer Times"
+  hostname: ""
+servers: []
+sql:
+  - schema: "internal/cache/schema"
+    engine: "sqlite"
+    queries: "sql/queries"
+    gen:
+      go:
+        out: "internal/cache"
+overrides:
+  go: null
+plugins: []
+rules: []
+options: {}
