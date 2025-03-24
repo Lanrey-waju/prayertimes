@@ -25,6 +25,7 @@ func (p *PrayerTimes) String() string {
 	)
 }
 
+// RetrievePrayerTimes retrieves prayer times from the cache
 func RetrievePrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 	defer config.TimeTrack(time.Now(), "RetrievePrayerTimes")
 	prayerTimes, err := db.GetPrayerTimeForCity(

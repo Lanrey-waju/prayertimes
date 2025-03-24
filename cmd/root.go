@@ -33,8 +33,13 @@ var rootCmd = &cobra.Command{
 		// get an instance of Queries
 		queries := cache.New(db)
 
-		config.EnsureConfig(timings.GetLocationParams)
+		// check if city is set in config
 		city := viper.GetString("location.city")
+
+		// if city is not set, get location info
+		if city == "" {
+			config.EnsureConfig(timings.GetLocationParams)
+		}
 		prayerTimes, err := timings.GetPrayerTimes(queries, city)
 		if err != nil {
 			fmt.Println(err)
