@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS prayer_times (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     city TEXT NOT NULL,
-    date DATE NOT NULL,
+    date TEXT NOT NULL,
     fajr TEXT NOT NULL,
     dhuhr TEXT NOT NULL,
     asr TEXT NOT NULL,

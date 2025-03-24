@@ -7,7 +7,6 @@ package cache
 
 import (
 	"context"
-	"time"
 )
 
 const getPrayerTimeForCity = `-- name: GetPrayerTimeForCity :one
@@ -17,7 +16,7 @@ WHERE city = ? AND date = ?
 
 type GetPrayerTimeForCityParams struct {
 	City string
-	Date time.Time
+	Date string
 }
 
 type GetPrayerTimeForCityRow struct {
@@ -54,7 +53,7 @@ ON CONFLICT(city, date) DO UPDATE SET
 
 type SavePrayerTimesParams struct {
 	City    string
-	Date    time.Time
+	Date    string
 	Fajr    string
 	Dhuhr   string
 	Asr     string

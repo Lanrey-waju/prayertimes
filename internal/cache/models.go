@@ -6,13 +6,12 @@ package cache
 
 import (
 	"database/sql"
-	"time"
 )
 
 type PrayerTime struct {
 	ID        int64
 	City      string
-	Date      time.Time
+	Date      string
 	Fajr      string
 	Dhuhr     string
 	Asr       string
