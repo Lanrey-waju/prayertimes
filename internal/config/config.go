@@ -2,8 +2,10 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -29,6 +31,7 @@ func InitConfig() {
 	}
 }
 
+// EnsureConfig ensures config file exists with usable values
 func EnsureConfig(locationProvider func() (string, float64, float64)) {
 	if viper.GetString("location.city") == "" {
 		city, lat, lon := locationProvider()
@@ -60,4 +63,9 @@ func EnsureConfig(locationProvider func() (string, float64, float64)) {
 		}
 		fmt.Println("config updated successfully")
 	}
+}
+
+func TimeTrack(start time.Time, name string) {
+	elapsed := time.Since(start)
+	log.Printf("%s took %s", name, elapsed)
 }
