@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/lanrey-waju/prayer-times/internal/cache"
 	"github.com/lanrey-waju/prayer-times/internal/config"
 	"github.com/lanrey-waju/prayer-times/internal/timings"
 	"github.com/spf13/cobra"
@@ -22,9 +23,24 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		config.InitConfig()
 
-		config.EnsureConfig(timings.GetLoacationParams)
+		// get an instance of sql.DB
+		db, err := cache.EnsureDB()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		// get an instance of Queries
+		queries := cache.New(db)
+
+		config.EnsureConfig(timings.GetLocationParams)
 		city := viper.GetString("location.city")
-		timings.GetPrayerTimes(city)
+		prayerTimes, err := timings.GetPrayerTimes(queries, city)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Println(prayerTimes)
 	},
 }
 

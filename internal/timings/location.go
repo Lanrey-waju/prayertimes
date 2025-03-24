@@ -37,7 +37,7 @@ func getLocation() *Location {
 }
 
 // GetCity uses getLocation function to return the City of the client
-func GetLoacationParams() (string, float64, float64) {
+func GetLocationParams() (string, float64, float64) {
 	loc := getLocation()
 	return loc.City, loc.Latitude, loc.Longitude
 }
