@@ -1,12 +1,17 @@
 package timings
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/lanrey-waju/prayer-times/internal/cache"
+	"github.com/lanrey-waju/prayer-times/internal/config"
+	"github.com/spf13/viper"
 )
 
 func (p *PrayerTimes) String() string {
@@ -20,9 +25,28 @@ func (p *PrayerTimes) String() string {
 	)
 }
 
+func RetrievePrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
+	defer config.TimeTrack(time.Now(), "RetrievePrayerTimes")
+	prayerTimes, err := db.GetPrayerTimeForCity(
+		context.Background(),
+		cache.GetPrayerTimeForCityParams{
+			City: city,
+			Date: time.Now().Format("02-01-2006"),
+		},
+	)
+	if err != nil {
+		return &PrayerTimes{}, err
+	}
+	return databasePrayertimesToPrayerTimes(prayerTimes), nil
+}
+
 // GetPrayerTimes calls the aladhan API for the prayer times
-func GetPrayerTimes(city string) *PrayerTimes {
+func GetPrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 	var prayertimes *PrayerTimes
+
+	if cache.DBExists() {
+		return RetrievePrayerTimes(db, city)
+	}
 
 	baseURL := "https://api.aladhan.com/v1/timingsByAddress/"
 	date := getDate()
@@ -49,8 +73,20 @@ func GetPrayerTimes(city string) *PrayerTimes {
 		fmt.Printf("error unmarshalling response: %v", err)
 	}
 
-	fmt.Println(prayertimes)
-	return prayertimes
+	if err := db.SavePrayerTimes(context.Background(), cache.SavePrayerTimesParams{
+		City:    viper.GetString("location.city"),
+		Date:    time.Now().Format("02-01-2006"),
+		Fajr:    prayertimes.Data.Timings.Fajr,
+		Dhuhr:   prayertimes.Data.Timings.Dhuhr,
+		Asr:     prayertimes.Data.Timings.Asr,
+		Maghrib: prayertimes.Data.Timings.Maghrib,
+		Isha:    prayertimes.Data.Timings.Isha,
+	}); err != nil {
+		return &PrayerTimes{}, err
+	}
+
+	fmt.Println("Prayer times saved to cache")
+	return prayertimes, nil
 }
 
 // getDate returns today's date in dd-mm-yyyy format
