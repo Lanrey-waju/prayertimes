@@ -9,20 +9,67 @@ import (
 	"os"
 	"time"
 
+	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/lipgloss/table"
 	"github.com/lanrey-waju/prayer-times/internal/cache"
 	"github.com/lanrey-waju/prayer-times/internal/config"
 	"github.com/spf13/viper"
 )
 
 func (p *PrayerTimes) String() string {
-	return fmt.Sprintf(
-		"Fajr: %s\nDhuhr: %s\n'Asr: %s\nMaghrib: %s\n'Ishaa: %s",
+	var (
+		purple = lipgloss.Color("99")
+		gray   = lipgloss.Color("245")
+		// lightGray = lipgloss.Color("241")
+		red = lipgloss.Color("160")
+
+		headerStyle      = lipgloss.NewStyle().Foreground(purple).Bold(true).Align(lipgloss.Center)
+		cellStyle        = lipgloss.NewStyle().Padding(0, 1).Width(14)
+		notOverTimeStyle = cellStyle.Foreground(gray)
+		overTimeStyle    = cellStyle.Foreground(red)
+	)
+	prayerTimes := []string{
 		p.Data.Timings.Fajr,
 		p.Data.Timings.Dhuhr,
 		p.Data.Timings.Asr,
 		p.Data.Timings.Maghrib,
 		p.Data.Timings.Isha,
-	)
+	}
+	currentTime := time.Now().Format("15:04")
+
+	t := table.New().
+		Border(lipgloss.NormalBorder()).
+		BorderStyle(lipgloss.NewStyle().Foreground(purple)).
+		StyleFunc(func(row, col int) lipgloss.Style {
+			if row == table.HeaderRow {
+				return headerStyle
+			}
+
+			// check if time of prayer is over
+			if col < len(prayerTimes) {
+				if isPrayerTimeOver(prayerTimes[col], currentTime) {
+					return overTimeStyle
+				}
+			}
+			return notOverTimeStyle
+		}).
+		Headers("Fajr", "Dhuhr", "'Asr", "Maghrib", "'Ishaa").
+		Rows(prayerTimes)
+	return t.Render()
+}
+
+// check if time of prayer is over
+func isPrayerTimeOver(prayerTime, currentTime string) bool {
+	var err error
+	var prayerTimeParsed, currentTimeParsed time.Time
+
+	if prayerTimeParsed, err = time.Parse("15:04", prayerTime); err != nil {
+		fmt.Println("error parsing prayer time: ", err)
+	}
+	if currentTimeParsed, err = time.Parse("15:04", currentTime); err != nil {
+		fmt.Println("error parsing current time: ", err)
+	}
+	return currentTimeParsed.After(prayerTimeParsed)
 }
 
 // RetrievePrayerTimes retrieves prayer times from the cache
