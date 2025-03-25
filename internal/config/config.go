@@ -1,16 +1,18 @@
 package config
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"time"
 
+	"github.com/lanrey-waju/prayer-times/internal/cache"
 	"github.com/spf13/viper"
 )
 
-func InitConfig() {
+func InitConfig() (*sql.DB, error) {
 	viper.SetDefault("location.country", "")
 	viper.SetDefault("location.city", "")
 	viper.SetDefault("location.latitude", 0.0)
@@ -21,7 +23,8 @@ func InitConfig() {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath(filepath.Join(os.Getenv("HOME"), ".config", "prayertimes"))
 
-	if err := viper.ReadInConfig(); err != nil {
+	var err error
+	if err = viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// config file does not exist
 		} else {
@@ -29,6 +32,7 @@ func InitConfig() {
 			os.Exit(1)
 		}
 	}
+	return cache.EnsureDB()
 }
 
 // EnsureConfig ensures config file exists with usable values

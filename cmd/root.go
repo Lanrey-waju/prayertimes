@@ -21,10 +21,8 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		config.InitConfig()
-
-		// get an instance of sql.DB
-		db, err := cache.EnsureDB()
+		// initialize config and get an instance of sql.DB
+		db, err := config.InitConfig()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -40,7 +38,7 @@ var rootCmd = &cobra.Command{
 		if city == "" {
 			config.EnsureConfig(timings.GetLocationParams)
 		}
-		prayerTimes, err := timings.GetPrayerTimes(queries, city)
+		prayerTimes, err := timings.RetrievePrayerTimes(queries, city)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
