@@ -2,6 +2,7 @@ package timings
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -83,6 +84,9 @@ func RetrievePrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 		},
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return GetPrayerTimes(db, city)
+		}
 		return &PrayerTimes{}, err
 	}
 	return databasePrayertimesToPrayerTimes(prayerTimes), nil
@@ -91,10 +95,6 @@ func RetrievePrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 // GetPrayerTimes calls the aladhan API for the prayer times
 func GetPrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 	var prayertimes *PrayerTimes
-
-	if cache.DBExists() {
-		return RetrievePrayerTimes(db, city)
-	}
 
 	baseURL := "https://api.aladhan.com/v1/timingsByAddress/"
 	date := getDate()
