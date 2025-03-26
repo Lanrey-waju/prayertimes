@@ -13,22 +13,27 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/lanrey-waju/prayer-times/internal/cache"
-	"github.com/lanrey-waju/prayer-times/internal/config"
 	"github.com/spf13/viper"
 )
 
 func (p *PrayerTimes) String() string {
 	var (
 		purple = lipgloss.Color("99")
-		gray   = lipgloss.Color("245")
-		// lightGray = lipgloss.Color("241")
-		red = lipgloss.Color("160")
+		white  = lipgloss.Color("#FFF")
+		green  = lipgloss.Color("#04B575")
+		red    = lipgloss.Color("160")
 
-		headerStyle      = lipgloss.NewStyle().Foreground(purple).Bold(true).Align(lipgloss.Center)
+		headerStyle      = lipgloss.NewStyle().Foreground(white).Bold(true).Align(lipgloss.Center)
 		cellStyle        = lipgloss.NewStyle().Padding(0, 1).Width(14)
-		notOverTimeStyle = cellStyle.Foreground(gray)
+		notOverTimeStyle = cellStyle.Foreground(green)
 		overTimeStyle    = cellStyle.Foreground(red)
+		infoStyle        = lipgloss.NewStyle().
+					Width(70).
+					Bold(true).
+					Foreground(white).
+					Align(lipgloss.Center)
 	)
+
 	prayerTimes := []string{
 		p.Data.Timings.Fajr,
 		p.Data.Timings.Dhuhr,
@@ -36,7 +41,9 @@ func (p *PrayerTimes) String() string {
 		p.Data.Timings.Maghrib,
 		p.Data.Timings.Isha,
 	}
+
 	currentTime := time.Now().Format("15:04")
+	dateToday := time.Now().Format("02-01-2006")
 
 	t := table.New().
 		Border(lipgloss.NormalBorder()).
@@ -56,6 +63,7 @@ func (p *PrayerTimes) String() string {
 		}).
 		Headers("Fajr", "Dhuhr", "'Asr", "Maghrib", "'Ishaa").
 		Rows(prayerTimes)
+	fmt.Println(infoStyle.Render("Date:", dateToday, "Time:", currentTime))
 	return t.Render()
 }
 
@@ -75,7 +83,6 @@ func isPrayerTimeOver(prayerTime, currentTime string) bool {
 
 // RetrievePrayerTimes retrieves prayer times from the cache
 func RetrievePrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
-	defer config.TimeTrack(time.Now(), "RetrievePrayerTimes")
 	prayerTimes, err := db.GetPrayerTimeForCity(
 		context.Background(),
 		cache.GetPrayerTimeForCityParams{
