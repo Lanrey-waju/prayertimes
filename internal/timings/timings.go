@@ -101,6 +101,7 @@ func RetrievePrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 
 // GetPrayerTimes calls the aladhan API for the prayer times
 func GetPrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
+	c := http.Client{Timeout: 5 * time.Second}
 	var prayertimes *PrayerTimes
 
 	baseURL := "https://api.aladhan.com/v1/timingsByAddress/"
@@ -113,9 +114,10 @@ func GetPrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 	}
 
 	req.Header.Set("accept", "application/json")
-	res, err := http.DefaultClient.Do(req)
+	res, err := c.Do(req)
 	if err != nil {
 		fmt.Printf("could not make http request: %v", err)
+		os.Exit(1)
 	}
 
 	dat, err := io.ReadAll(res.Body)
