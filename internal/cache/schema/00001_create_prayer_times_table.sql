@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS prayer_times (
     asr TEXT NOT NULL,
     maghrib TEXT NOT NULL,
     isha TEXT NOT NULL,
+    hijri_date TEXT NOT NULL,
+    hijri_day TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(city, date)  -- Prevent duplicates per city per day
 );

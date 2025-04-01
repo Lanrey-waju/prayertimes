@@ -10,7 +10,7 @@ import (
 )
 
 const getPrayerTimeForCity = `-- name: GetPrayerTimeForCity :one
-SELECT fajr, dhuhr, asr, maghrib, isha FROM prayer_times
+SELECT fajr, dhuhr, asr, maghrib, isha, hijri_date, hijri_day FROM prayer_times
 WHERE city = ? AND date = ?
 `
 
@@ -20,11 +20,13 @@ type GetPrayerTimeForCityParams struct {
 }
 
 type GetPrayerTimeForCityRow struct {
-	Fajr    string
-	Dhuhr   string
-	Asr     string
-	Maghrib string
-	Isha    string
+	Fajr      string
+	Dhuhr     string
+	Asr       string
+	Maghrib   string
+	Isha      string
+	HijriDate string
+	HijriDay  string
 }
 
 func (q *Queries) GetPrayerTimeForCity(ctx context.Context, arg GetPrayerTimeForCityParams) (GetPrayerTimeForCityRow, error) {
@@ -36,29 +38,35 @@ func (q *Queries) GetPrayerTimeForCity(ctx context.Context, arg GetPrayerTimeFor
 		&i.Asr,
 		&i.Maghrib,
 		&i.Isha,
+		&i.HijriDate,
+		&i.HijriDay,
 	)
 	return i, err
 }
 
 const savePrayerTimes = `-- name: SavePrayerTimes :exec
-INSERT INTO prayer_times (city, date, fajr, dhuhr, asr, maghrib, isha)
-VALUES (?, ?, ?, ?, ?, ?, ?)
+INSERT INTO prayer_times (city, date, fajr, dhuhr, asr, maghrib, isha, hijri_date, hijri_day)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 ON CONFLICT(city, date) DO UPDATE SET
     fajr = excluded.fajr,
     dhuhr = excluded.dhuhr,
     asr = excluded.asr,
     maghrib = excluded.maghrib,
-    isha = excluded.isha
+    isha = excluded.isha,
+    hijri_date = excluded.hijri_date,
+    hijri_day = excluded.hijri_day
 `
 
 type SavePrayerTimesParams struct {
-	City    string
-	Date    string
-	Fajr    string
-	Dhuhr   string
-	Asr     string
-	Maghrib string
-	Isha    string
+	City      string
+	Date      string
+	Fajr      string
+	Dhuhr     string
+	Asr       string
+	Maghrib   string
+	Isha      string
+	HijriDate string
+	HijriDay  string
 }
 
 func (q *Queries) SavePrayerTimes(ctx context.Context, arg SavePrayerTimesParams) error {
@@ -70,6 +78,8 @@ func (q *Queries) SavePrayerTimes(ctx context.Context, arg SavePrayerTimesParams
 		arg.Asr,
 		arg.Maghrib,
 		arg.Isha,
+		arg.HijriDate,
+		arg.HijriDay,
 	)
 	return err
 }

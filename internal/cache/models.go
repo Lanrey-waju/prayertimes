@@ -17,5 +17,7 @@ type PrayerTime struct {
 	Asr       string
 	Maghrib   string
 	Isha      string
+	HijriDate string
+	HijriDay  string
 	CreatedAt sql.NullTime
 }

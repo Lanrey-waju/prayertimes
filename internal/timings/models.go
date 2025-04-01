@@ -11,6 +11,8 @@ func databasePrayertimesToPrayerTimes(dbPrayerTimes cache.GetPrayerTimeForCityRo
 	prayerTimes.Data.Timings.Asr = dbPrayerTimes.Asr
 	prayerTimes.Data.Timings.Maghrib = dbPrayerTimes.Maghrib
 	prayerTimes.Data.Timings.Isha = dbPrayerTimes.Isha
+	prayerTimes.Data.Date.Hijri.Date = dbPrayerTimes.HijriDate
+	prayerTimes.Data.Date.Hijri.Day = dbPrayerTimes.HijriDay
 
 	return &prayerTimes
 }

@@ -43,7 +43,12 @@ func (p *PrayerTimes) String() string {
 	}
 
 	currentTime := time.Now().Format("15:04")
-	dateToday := time.Now().Format("02-01-2006")
+	dateToday := time.Now().
+		Format("02-01-2006") +
+		fmt.Sprintf(
+			" (Gregorian) | %s (Hijri)",
+			p.Data.Date.Hijri.Date,
+		)
 
 	t := table.New().
 		Border(lipgloss.NormalBorder()).
@@ -63,7 +68,7 @@ func (p *PrayerTimes) String() string {
 		}).
 		Headers("Fajr", "Dhuhr", "'Asr", "Maghrib", "'Ishaa").
 		Rows(prayerTimes)
-	fmt.Println(infoStyle.Render("Date:", dateToday, "Time:", currentTime))
+	fmt.Println(infoStyle.Render("Date:", dateToday, "| Time:", currentTime))
 	return t.Render()
 }
 
@@ -131,13 +136,15 @@ func GetPrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 	}
 
 	if err := db.SavePrayerTimes(context.Background(), cache.SavePrayerTimesParams{
-		City:    viper.GetString("location.city"),
-		Date:    time.Now().Format("02-01-2006"),
-		Fajr:    prayertimes.Data.Timings.Fajr,
-		Dhuhr:   prayertimes.Data.Timings.Dhuhr,
-		Asr:     prayertimes.Data.Timings.Asr,
-		Maghrib: prayertimes.Data.Timings.Maghrib,
-		Isha:    prayertimes.Data.Timings.Isha,
+		City:      viper.GetString("location.city"),
+		Date:      time.Now().Format("02-01-2006"),
+		Fajr:      prayertimes.Data.Timings.Fajr,
+		Dhuhr:     prayertimes.Data.Timings.Dhuhr,
+		Asr:       prayertimes.Data.Timings.Asr,
+		Maghrib:   prayertimes.Data.Timings.Maghrib,
+		Isha:      prayertimes.Data.Timings.Isha,
+		HijriDate: prayertimes.Data.Date.Hijri.Date,
+		HijriDay:  prayertimes.Data.Date.Hijri.Day,
 	}); err != nil {
 		return &PrayerTimes{}, err
 	}
