@@ -68,7 +68,7 @@ func (p *PrayerTimes) String() string {
 		}).
 		Headers("Fajr", "Dhuhr", "'Asr", "Maghrib", "'Ishaa").
 		Rows(prayerTimes)
-	fmt.Println(infoStyle.Render("Date:", dateToday, "| Time:", currentTime))
+	fmt.Println(infoStyle.Render("Date:", dateToday, "Time:", currentTime))
 	return t.Render()
 }
 
