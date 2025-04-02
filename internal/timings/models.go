@@ -1,6 +1,6 @@
 package timings
 
-import "github.com/lanrey-waju/prayer-times/internal/cache"
+import "github.com/lanrey-waju/prayertimes/internal/cache"
 
 // databasePrayertimesToPrayerTimes converts a database prayer times row to a PrayerTimes struct
 func databasePrayertimesToPrayerTimes(dbPrayerTimes cache.GetPrayerTimeForCityRow) *PrayerTimes {

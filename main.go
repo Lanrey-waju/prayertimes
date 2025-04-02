@@ -6,8 +6,8 @@ package main
 import (
 	"time"
 
-	"github.com/lanrey-waju/prayer-times/cmd"
-	"github.com/lanrey-waju/prayer-times/internal/config"
+	"github.com/lanrey-waju/prayertimes/cmd"
+	"github.com/lanrey-waju/prayertimes/internal/config"
 )
 
 func main() {

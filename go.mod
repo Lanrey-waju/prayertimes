@@ -1,12 +1,13 @@
-module github.com/lanrey-waju/prayer-times
+module github.com/lanrey-waju/prayertimes
 
-go 1.23.2
+go 1.24.1
 
 require (
 	github.com/charmbracelet/lipgloss v1.1.0
-	github.com/pressly/goose/v3 v3.24.1
+	github.com/lanrey-waju/prayer-times v0.0.0-20250402131629-a1faffcecca7
+	github.com/pressly/goose/v3 v3.24.2
 	github.com/spf13/cobra v1.9.1
-	github.com/spf13/viper v1.20.0
+	github.com/spf13/viper v1.20.1
 	modernc.org/sqlite v1.37.0
 )
 
@@ -19,7 +20,6 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
-	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
@@ -43,7 +43,7 @@ require (
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.62.1 // indirect
 	modernc.org/mathutil v1.7.1 // indirect

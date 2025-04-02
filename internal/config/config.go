@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/lanrey-waju/prayer-times/internal/cache"
+	"github.com/lanrey-waju/prayertimes/internal/cache"
 	"github.com/spf13/viper"
 )
 

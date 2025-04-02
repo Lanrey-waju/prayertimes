@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/lanrey-waju/prayer-times/internal/cache"
-	"github.com/lanrey-waju/prayer-times/internal/config"
-	"github.com/lanrey-waju/prayer-times/internal/timings"
+	"github.com/lanrey-waju/prayertimes/internal/cache"
+	"github.com/lanrey-waju/prayertimes/internal/config"
+	"github.com/lanrey-waju/prayertimes/internal/timings"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
