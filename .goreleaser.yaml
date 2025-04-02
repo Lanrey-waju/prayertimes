@@ -10,18 +10,20 @@ version: 2
 
 before:
   hooks:
-    # You may remove this if you don't use go modules.
-    - go mod tidy
-    # you may remove this if you don't need go generate
-    - go generate ./...
+    - go mod vendor
 
 builds:
-  - env:
+  - id: prayertimes
+    binary: prayertimes
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
+    goarch:
+      - amd64
+      - arm64
 
 archives:
   - formats: [tar.gz]
@@ -44,6 +46,7 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+      - "^chore:"
 
 release:
   footer: >-
@@ -51,3 +54,21 @@ release:
     ---
 
     Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
+
+brews:
+  - name: prayertimes
+    repository:
+      owner: Lanrey-waju
+      name: homebrew-tools
+      branch: main
+      token: "{{ .Env.GITHUB_TOKEN }}"
+    homepage: "https://github.com/lanrey-waju/prayertimes"
+    description: "A CLI tool for retrieving Islamic prayer times"
+    commit_author:
+      name: Abdulmu'min
+      email: lanreywaju97@gmail.com
+    license: "MIT"
+    install: |
+      bin.install "prayertimes"
+    test: |
+      system "#{bin}/prayertimes", "--help"
