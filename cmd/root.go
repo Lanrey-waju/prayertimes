@@ -16,7 +16,7 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "prayer-times",
+	Use:   "prayertimes",
 	Short: "A cli app to get prayer times",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
