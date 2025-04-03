@@ -3,10 +3,8 @@ package config
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/lanrey-waju/prayertimes/internal/cache"
 	"github.com/spf13/viper"
@@ -69,7 +67,7 @@ func EnsureConfig(locationProvider func() (string, float64, float64)) {
 	}
 }
 
-func TimeTrack(start time.Time, name string) {
-	elapsed := time.Since(start)
-	log.Printf("%s took %s", name, elapsed)
-}
+// func TimeTrack(start time.Time, name string) {
+// 	elapsed := time.Since(start)
+// 	log.Printf("%s took %s", name, elapsed)
+// }
