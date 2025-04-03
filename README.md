@@ -11,13 +11,14 @@ I fancy myself as something of a command-line junkie. And as a muslim, prayer is
 ### Using Homebrew (For MacOS & Linux)
 
 ```
+brew tap lanrey-waju/prayertimes
 brew install prayertimes
 ```
 
 ### Or just install it with `go` (If you have `go` installed)
 
 ```
-go install github.com/lanrey-waju/prayer-times
+go install github.com/lanrey-waju/prayer-times@latest
 ```
 
 ### Build (requires Go 1.24+)
@@ -35,5 +36,7 @@ prayertimes
 ```
 
 Example Output:
+
 ![prayer times output](./assets/prayertimes.png)
+
 Prayer time in red indicates the particular time is over and green connotes upcoming prayer times.
