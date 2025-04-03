@@ -4,7 +4,6 @@ go 1.24.1
 
 require (
 	github.com/charmbracelet/lipgloss v1.1.0
-	github.com/lanrey-waju/prayer-times v0.0.0-20250402131629-a1faffcecca7
 	github.com/pressly/goose/v3 v3.24.2
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1

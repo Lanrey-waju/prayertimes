@@ -24,6 +24,8 @@ builds:
     goarch:
       - amd64
       - arm64
+    idflags:
+      - -s -w -X github.com/lanrey-waju/prayertimes/cmd.version={{.Version}}
 
 archives:
   - formats: [tar.gz]
