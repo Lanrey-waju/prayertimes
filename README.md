@@ -18,18 +18,24 @@ brew install prayertimes
 ### Or just install it with `go` (If you have `go` installed)
 
 ```
-go install github.com/lanrey-waju/prayer-times@latest
+go install github.com/lanrey-waju/prayertimes@latest
 ```
 
 ### Build (requires Go 1.24+)
 
 ```
-git clone https://github.com/lanrey-waju/prayer-times.git
-cd prayer-times
+git clone https://github.com/lanrey-waju/prayertimes.git
+cd prayertimes
 go build
 ```
 
 ## Usage
+
+To check the version of the tool, run:
+
+```
+prayertimes version
+```
 
 ```
 prayertimes
