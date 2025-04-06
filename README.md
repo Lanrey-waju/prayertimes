@@ -47,7 +47,7 @@ Example Output:
 
 ![prayer times output](./assets/prayertimes.png)
 
-for help, run:
+To get help on available commands, run:
 
 ```
 prayertimes --help
