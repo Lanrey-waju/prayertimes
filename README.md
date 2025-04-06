@@ -47,4 +47,10 @@ Example Output:
 
 ![prayer times output](./assets/prayertimes.png)
 
+for help, run:
+
+```
+prayertimes --help
+```
+
 Prayer time in red indicates the particular time is over and green connotes upcoming prayer times.
