@@ -107,7 +107,7 @@ func RetrievePrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 // GetPrayerTimes calls the aladhan API for the prayer times
 func GetPrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 	c := http.Client{Timeout: 5 * time.Second}
-	var prayertimes *PrayerTimes
+	var prayertimes PrayerTimes
 
 	baseURL := "https://api.aladhan.com/v1/timingsByAddress/"
 	date := getDate()
@@ -133,6 +133,7 @@ func GetPrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 
 	if err := json.Unmarshal(dat, &prayertimes); err != nil {
 		fmt.Printf("error unmarshalling response: %v", err)
+		os.Exit(1)
 	}
 
 	if err := db.SavePrayerTimes(context.Background(), cache.SavePrayerTimesParams{
@@ -150,7 +151,7 @@ func GetPrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 	}
 
 	fmt.Println("Prayer times saved to cache")
-	return prayertimes, nil
+	return &prayertimes, nil
 }
 
 // getDate returns today's date in dd-mm-yyyy format
