@@ -47,6 +47,10 @@ Example Output:
 
 ![prayer times output](./assets/prayertimes.png)
 
+To ignore cached data, you can use the `-r` or `--refresh` flag like so:
+
+`prayertimes -r ` or `prayertimes --refresh`
+
 To get help on available commands, run:
 
 ```
