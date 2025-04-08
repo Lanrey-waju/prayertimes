@@ -22,6 +22,8 @@ var rootCmd = &cobra.Command{
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
 		// initialize config and get an instance of sql.DB
+		var prayerTimes *timings.PrayerTimes
+		var err error
 		db, err := config.InitConfig()
 		if err != nil {
 			fmt.Println(err)
@@ -41,7 +43,19 @@ var rootCmd = &cobra.Command{
 			city = viper.GetString("location.city")
 		}
 
-		prayerTimes, err := timings.RetrievePrayerTimes(queries, city)
+		if cmd.Flag("refresh").Changed {
+			// if refresh flag is set, ignore cache and refresh prayer times
+			prayerTimes, err = timings.GetPrayerTimes(queries, city)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			fmt.Println("Prayer times refreshed successfully")
+			fmt.Println(prayerTimes)
+			os.Exit(0)
+		}
+
+		prayerTimes, err = timings.RetrievePrayerTimes(queries, city)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -69,4 +83,5 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Flags().BoolP("refresh", "r", false, "Refresh prayer times from API")
 }
