@@ -150,7 +150,6 @@ func GetPrayerTimes(db *cache.Queries, city string) (*PrayerTimes, error) {
 		return &PrayerTimes{}, err
 	}
 
-	fmt.Println("Prayer times saved to cache")
 	return &prayertimes, nil
 }
 

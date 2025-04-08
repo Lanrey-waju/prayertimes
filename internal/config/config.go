@@ -55,14 +55,14 @@ func EnsureConfig(locationProvider func() (string, float64, float64)) {
 
 	configFile := filepath.Join(configDir, "config.yaml")
 	if err := viper.SafeWriteConfigAs(configFile); err != nil {
-		if os.IsExist(err) {
+		if _, ok := err.(viper.ConfigFileAlreadyExistsError); ok {
 			viper.WatchConfig()
 		} else {
 			fmt.Printf("error writing config %v\n", err)
 			os.Exit(1)
 		}
 	}
-	fmt.Println("config updated successfully")
+	// fmt.Println("config updated successfully")
 }
 
 // func TimeTrack(start time.Time, name string) {
