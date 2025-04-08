@@ -12,34 +12,52 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+type OSProvider interface {
+	GetOS() string
+	GetUserHomeDir() (string, error)
+	MkdirAll(path string, perm os.FileMode) error
+}
+
+type DefaultOSProvider struct{}
+
+func (p *DefaultOSProvider) GetOS() string {
+	return runtime.GOOS
+}
+
+func (p *DefaultOSProvider) GetUserHomeDir() (string, error) {
+	return os.UserHomeDir()
+}
+
+func (p *DefaultOSProvider) MkdirAll(path string, perm os.FileMode) error {
+	return os.MkdirAll(path, perm)
+}
+
 //go:embed schema/*.sql
 var schemaFS embed.FS
 
-func getDBPath() string {
-	homeDir, err := os.UserHomeDir()
+func GetDBPath(osProvider OSProvider) (string, error) {
+	homeDir, err := osProvider.GetUserHomeDir()
 	if err != nil {
-		fmt.Printf("could not locate homne directory: %v", err)
-		os.Exit(1)
+		return "", fmt.Errorf("could not get user home directory: %v", err)
 	}
 
 	var dbFolder string
 
-	if runtime.GOOS == "windows" {
+	if osProvider.GetOS() == "windows" {
 		dbFolder = filepath.Join(homeDir, "AppData", "Local", "prayertimes")
 	} else {
 		dbFolder = filepath.Join(homeDir, ".cache", "prayertimes")
 	}
 
-	if err := os.MkdirAll(dbFolder, 0o755); err != nil {
-		fmt.Printf("error creating cache directory: %v", err)
-		os.Exit(1)
+	if err := osProvider.MkdirAll(dbFolder, 0o755); err != nil {
+		return "", fmt.Errorf("could not create cache directory: %v", err)
 	}
 
-	return filepath.Join(dbFolder, "prayertimes.sqlite")
+	return filepath.Join(dbFolder, "prayertimes.sqlite"), nil
 }
 
 func DBExists() bool {
-	dbPath := getDBPath()
+	dbPath := GetDBPath()
 	if _, err := os.Stat(dbPath); err == nil {
 		return true
 	}
@@ -48,7 +66,7 @@ func DBExists() bool {
 
 // EnsureDB ensures the database exists and is up to date
 func EnsureDB() (*sql.DB, error) {
-	dbPath := getDBPath()
+	dbPath := GetDBPath()
 
 	dbFolder := filepath.Dir(dbPath)
 
