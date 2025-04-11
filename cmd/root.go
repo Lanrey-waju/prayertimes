@@ -22,6 +22,7 @@ var rootCmd = &cobra.Command{
 	Short: "A cli app to get prayer times",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
+	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		// initialize config and get an instance of sql.DB
 		var prayerTimes *timings.PrayerTimes
