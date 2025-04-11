@@ -20,15 +20,19 @@ type OSProvider interface {
 
 type DefaultOSProvider struct{}
 
-func (p *DefaultOSProvider) GetOS() string {
+func NewDefaultOSProvider() OSProvider {
+	return DefaultOSProvider{}
+}
+
+func (p DefaultOSProvider) GetOS() string {
 	return runtime.GOOS
 }
 
-func (p *DefaultOSProvider) GetUserHomeDir() (string, error) {
+func (p DefaultOSProvider) GetUserHomeDir() (string, error) {
 	return os.UserHomeDir()
 }
 
-func (p *DefaultOSProvider) MkdirAll(path string, perm os.FileMode) error {
+func (p DefaultOSProvider) MkdirAll(path string, perm os.FileMode) error {
 	return os.MkdirAll(path, perm)
 }
 
@@ -56,8 +60,11 @@ func GetDBPath(osProvider OSProvider) (string, error) {
 	return filepath.Join(dbFolder, "prayertimes.sqlite"), nil
 }
 
-func DBExists() bool {
-	dbPath := GetDBPath()
+func DBExists(osProvider OSProvider) bool {
+	dbPath, err := GetDBPath(osProvider)
+	if err != nil {
+		fmt.Printf("error getting db path: %v", err)
+	}
 	if _, err := os.Stat(dbPath); err == nil {
 		return true
 	}
@@ -65,8 +72,8 @@ func DBExists() bool {
 }
 
 // EnsureDB ensures the database exists and is up to date
-func EnsureDB() (*sql.DB, error) {
-	dbPath := GetDBPath()
+func EnsureDB(osProvider OSProvider) (*sql.DB, error) {
+	dbPath, _ := GetDBPath(osProvider)
 
 	dbFolder := filepath.Dir(dbPath)
 
@@ -81,7 +88,7 @@ func EnsureDB() (*sql.DB, error) {
 		return nil, fmt.Errorf("failed to open database: %v", err)
 	}
 
-	if !DBExists() {
+	if !DBExists(osProvider) {
 		fmt.Println("Database does not exist. Initializing...")
 
 		goose.SetBaseFS(schemaFS)

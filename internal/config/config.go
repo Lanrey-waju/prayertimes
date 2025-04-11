@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func InitConfig() (*sql.DB, error) {
+func InitConfig(osProvider cache.OSProvider) (*sql.DB, error) {
 	viper.SetDefault("location.country", "")
 	viper.SetDefault("location.city", "")
 	viper.SetDefault("location.latitude", 0.0)
@@ -30,7 +30,7 @@ func InitConfig() (*sql.DB, error) {
 			os.Exit(1)
 		}
 	}
-	return cache.EnsureDB()
+	return cache.EnsureDB(osProvider)
 }
 
 // EnsureConfig ensures config file exists with usable values

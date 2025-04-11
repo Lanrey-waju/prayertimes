@@ -24,7 +24,10 @@ var rootCmd = &cobra.Command{
 		// initialize config and get an instance of sql.DB
 		var prayerTimes *timings.PrayerTimes
 		var err error
-		db, err := config.InitConfig()
+
+		osProvider := cache.NewDefaultOSProvider()
+
+		db, err := config.InitConfig(osProvider)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
