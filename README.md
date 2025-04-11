@@ -34,7 +34,7 @@ go build
 To check the version of the tool, run:
 
 ```
-prayertimes version
+prayertimes --version
 ```
 
 To get the prayer times for your city, run:
