@@ -14,6 +14,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var version = "dev"
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "prayertimes",
@@ -58,6 +60,11 @@ var rootCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
+		if cmd.Flag("version").Changed {
+			fmt.Printf("prayertimes %s\n", version)
+			os.Exit(0)
+		}
+
 		prayerTimes, err = timings.RetrievePrayerTimes(queries, city)
 		if err != nil {
 			fmt.Println(err)
@@ -86,5 +93,6 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Flags().BoolP("version", "v", false, "Show version")
 	rootCmd.Flags().BoolP("refresh", "r", false, "Refresh prayer times from API")
 }
