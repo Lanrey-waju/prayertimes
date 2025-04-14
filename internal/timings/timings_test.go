@@ -10,8 +10,9 @@ func TestIsPrayerTimeOver(t *testing.T) {
 		prayerTime  string
 		want        bool
 	}{
-		"prayer time not over": {currentTime: "05:06", prayerTime: "05:40", want: false},
-		"prayer time over":     {currentTime: "13:00", prayerTime: "12:58", want: true},
+		"current time before prayer time": {currentTime: "05:06", prayerTime: "05:40", want: false},
+		"current time after prayer time":  {currentTime: "13:00", prayerTime: "12:58", want: true},
+		"current time equals prayer time": {currentTime: "13:00", prayerTime: "13:00", want: false},
 	}
 
 	for name, tc := range tests {
